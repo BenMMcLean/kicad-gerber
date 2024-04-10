@@ -1,0 +1,16 @@
+name: 'KiCad Gerber'
+description: 'Generates gerber & drill files for a specified schematic and places them in a specified directory'
+inputs:
+  input-file:  # id of input
+    description: 'The schematic to process'
+    required: true
+  output-directory:
+    description: 'The directory in which to place the output'
+    required: false
+    default: "gerber"
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.input-file }}
+    - ${{ inputs.output-directory }}
