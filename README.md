@@ -14,7 +14,7 @@ The directory in which to place the gerber & drill files. Default "gerber".
 
 ## Example usage
 ```
-uses: BenMMcLean/KicadGerber@v0.1.0
+uses: BenMMcLean/KicadGerber@v1
 with:
   input-file: pcb.kicad_pcb
 ```
