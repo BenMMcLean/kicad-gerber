@@ -1,8 +1,8 @@
 name: 'KiCad Gerber'
-description: 'Generates gerber & drill files for a specified schematic and places them in a specified directory'
+description: 'Generates gerber & drill files for a specified KiCad PCB and places them in a specified directory'
 inputs:
-  input-file:  # id of input
-    description: 'The schematic to process'
+  input-file:
+    description: 'The PCB file to process'
     required: true
   output-directory:
     description: 'The directory in which to place the output'
