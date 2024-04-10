@@ -11,6 +11,7 @@ legacy-semver-padding: 4
 build-metadata-padding: 4
 commits-since-version-source-padding: 4
 tag-pre-release-weight: 60000
+next-version: 1.0.0
 commit-message-incrementing: Enabled
 branches:
   develop:
