@@ -117,6 +117,7 @@ jobs:
         uses: chuhlomin/render-template@v1
         with:
           template: action.template.yml
+          result_path: action.yml
           vars: |
             image: ghcr.io/${{ env.REPOSITORY_LC }}:${{ needs.version.outputs.version }}
       - uses: stefanzweifel/git-auto-commit-action@v5
