@@ -78,6 +78,7 @@ jobs:
             ghcr.io/${{ env.REPOSITORY_LC }}:${{ needs.version.outputs.version }}
   update-image:
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
     outputs:
       commit_hash: ${{ steps.auto-commit.outputs.commit_hash }}
     needs: 
@@ -103,7 +104,7 @@ jobs:
             image: ghcr.io/${{ env.REPOSITORY_LC }}:${{ needs.version.outputs.version }}
       - uses: stefanzweifel/git-auto-commit-action@v5
         id: auto-commit
-  release:
+  release-main:
     runs-on: ubuntu-latest
     needs: 
       - version
@@ -127,3 +128,25 @@ jobs:
           draft: false
           prerelease: ${{ github.ref == 'refs/heads/develop' }}
           commitish: ${{ needs.update-image.outputs.commit_hash }}
+  release-other:
+    runs-on: ubuntu-latest
+    needs: 
+      - version
+    permissions:
+      contents: write
+    outputs:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+    if: github.event_name != 'pull_request' && github.ref != 'refs/heads/main'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ needs.version.outputs.version }}
+          release_name: Release ${{ needs.version.outputs.version }}
+          draft: false
+          prerelease: ${{ github.ref == 'refs/heads/develop' }}
