@@ -11,7 +11,7 @@ inputs:
     default: "gerber"
 runs:
   using: 'docker'
-  image: 'Dockerfile'
+  image: 'ghcr.io/benmmclean/kicadgerber:1.1.0-alpha.21'
   args:
     - ${{ inputs.input-file }}
     - ${{ inputs.output-directory }}
