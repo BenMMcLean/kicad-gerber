@@ -116,7 +116,7 @@ jobs:
         id: render_template
         uses: chuhlomin/render-template@v1
         with:
-          template: kube.template.yml
+          template: action.template.yml
           vars: |
             image: ghcr.io/${{ env.REPOSITORY_LC }}:${{ needs.version.outputs.version }}
       - uses: stefanzweifel/git-auto-commit-action@v5
