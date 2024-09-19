@@ -28,14 +28,115 @@ jobs:
       - name: Display SemVer
         run: |
           echo "SemVer: ${{ steps.gitversion.outputs.semVer }}"
-  release:
+  docker:
     runs-on: ubuntu-latest
     needs: version
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Lowercase Repository
+        run: |
+          echo "REPOSITORY_LC=${REPOSITORY,,}" >>${GITHUB_ENV}
+        env:
+          REPOSITORY: '${{ github.repository }}'
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: |
+            ghcr.io/${{ env.REPOSITORY_LC }}
+          tags: |
+            type=schedule
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+            type=sha
+      - name: Log in to the Container registry
+        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+        with:
+          registry: https://ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          platforms: linux/amd64
+          push: true
+          tags: |
+            ${{ steps.meta.outputs.tags }}
+            ghcr.io/${{ env.REPOSITORY_LC }}:latest
+            ghcr.io/${{ env.REPOSITORY_LC }}:${{ needs.version.outputs.version }}
+  update-image:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    outputs:
+      commit_hash: ${{ steps.auto-commit.outputs.commit_hash }}
+    needs: 
+      - docker
+      - version
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Lowercase Repository
+        run: |
+          echo "REPOSITORY_LC=${REPOSITORY,,}" >>${GITHUB_ENV}
+        env:
+          REPOSITORY: '${{ github.repository }}'
+      - name: Render template
+        id: render_template
+        uses: chuhlomin/render-template@v1
+        with:
+          template: action.template.yml
+          result_path: action.yml
+          vars: |
+            image: ghcr.io/${{ env.REPOSITORY_LC }}:${{ needs.version.outputs.version }}
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        id: auto-commit
+  release-main:
+    runs-on: ubuntu-latest
+    needs: 
+      - version
+      - update-image
     permissions:
       contents: write
     outputs:
       upload_url: ${{ steps.create_release.outputs.upload_url }}
     if: github.event_name != 'pull_request'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ needs.version.outputs.version }}
+          release_name: Release ${{ needs.version.outputs.version }}
+          draft: false
+          prerelease: ${{ github.ref == 'refs/heads/develop' }}
+          commitish: ${{ needs.update-image.outputs.commit_hash }}
+  release-other:
+    runs-on: ubuntu-latest
+    needs: 
+      - version
+    permissions:
+      contents: write
+    outputs:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+    if: github.event_name != 'pull_request' && github.ref != 'refs/heads/main'
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
