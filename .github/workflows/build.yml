@@ -101,7 +101,7 @@ jobs:
           template: action.template.yml
           result_path: action.yml
           vars: |
-            image: ghcr.io/${{ env.REPOSITORY_LC }}:${{ needs.version.outputs.version }}
+            image: docker://ghcr.io/${{ env.REPOSITORY_LC }}:${{ needs.version.outputs.version }}
       - uses: stefanzweifel/git-auto-commit-action@v5
         id: auto-commit
   release-main:
