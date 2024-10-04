@@ -1,7 +1,7 @@
 #!/bin/sh -l
 
-output="$2"
-input="$1"
+output="/github/workspace/$2"
+input="/github/workspace/$1"
 placement_format="${3:-ascii}"
 
 filename=$(basename -- "$output")
