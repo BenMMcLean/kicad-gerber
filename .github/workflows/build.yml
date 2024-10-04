@@ -23,7 +23,6 @@ jobs:
         uses: gittools/actions/gitversion/execute@v0.9.6
         with:
           useConfigFile: true
-          showConfig: true
           configFilePath: ./gitversion.yml
       - name: Display SemVer
         run: |

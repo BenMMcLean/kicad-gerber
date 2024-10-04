@@ -12,6 +12,10 @@ Generates gerber & drill files for a specified PCB and places them in a specifie
 
 The directory in which to place the gerber & drill files. Default "gerber".
 
+### `position-format`
+
+The position format to use. Options are gerber, csv, ascii, and none. Default "none".
+
 ## Example usage
 ```
 uses: BenMMcLean/KicadGerber@v1
