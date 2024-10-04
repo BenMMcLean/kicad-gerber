@@ -4,7 +4,7 @@ output="/github/workspace/$2"
 input="/github/workspace/$1"
 placement_format="${3:-ascii}"
 
-filename=$(basename -- "$output")
+filename=$(basename -- "$input")
 
 mkdir -p "$output"
 kicad-cli pcb export drill -o "$output" "$input"
