@@ -1,4 +1,4 @@
-#!/bin/sh -l
+#!/bin/bash
 
 output="/github/workspace/$2"
 input="/github/workspace/$1"
