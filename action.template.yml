@@ -9,12 +9,17 @@ inputs:
     description: 'The directory in which to place the output'
     required: false
     default: "gerber"
+  position-format:
+    description: 'The position format to use. Options are gerber, csv, ascii, and none'
+    required: false
+    default: "none"
 runs:
   using: 'docker'
   image: '{{ .image }}'
   args:
     - ${{`{{ inputs.input-file }}`}}
     - ${{`{{ inputs.output-directory }}`}}
+    - ${{`{{ inputs.position-format }}`}}
 branding:
   icon: 'cpu'
   color: 'green'
