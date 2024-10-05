@@ -18,7 +18,7 @@ The position format to use. Options are gerber, csv, ascii, and none. Default "n
 
 ## Example usage
 ```
-uses: {{{ env.ACTION_REPO }}}@{{{ env.ACTION_VERSION }}}
+uses: {{{ env.ACTION_REPO }}}@v{{{ env.ACTION_VERSION }}}
 with:
   input-file: pcb.kicad_pcb
 ```
