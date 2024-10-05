@@ -1,4 +1,4 @@
-# KicadGerber Action
+# kicad-gerber Action
 
 Generates gerber & drill files for a specified PCB and places them in a specified directory
 
@@ -18,7 +18,7 @@ The position format to use. Options are gerber, csv, ascii, and none. Default "n
 
 ## Example usage
 ```
-uses: BenMMcLean/KicadGerber@v1
+uses: BenMMcLean/kicad-gerber@2.0.2
 with:
   input-file: pcb.kicad_pcb
 ```
