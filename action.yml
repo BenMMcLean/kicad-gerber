@@ -15,7 +15,7 @@ inputs:
     default: "none"
 runs:
   using: 'docker'
-  image: 'docker://ghcr.io/benmmclean/kicad-gerber:2.0.3'
+  image: 'docker://ghcr.io/benmmclean/kicad-gerber:2.0.4'
   args:
     - ${{ inputs.input-file }}
     - ${{ inputs.output-directory }}

@@ -18,7 +18,7 @@ The position format to use. Options are gerber, csv, ascii, and none. Default "n
 
 ## Example usage
 ```
-uses: BenMMcLean/kicad-gerber@v2.0.3
+uses: BenMMcLean/kicad-gerber@v2.0.4
 with:
   input-file: pcb.kicad_pcb
 ```
