@@ -9,17 +9,32 @@ inputs:
     description: 'The directory in which to place the output'
     required: false
     default: "gerber"
+  drill-format:
+    description: 'The drill format to use. Options are gerber, excellon, and none.'
+    required: false
+    default: "excellon"
+  drill-units:
+    description: 'The units to use for the drill file. Options are in, and mm. Does nothing if drill format is none or gerber.'
+    required: false
+    default: "mm"
   position-format:
     description: 'The position format to use. Options are gerber, csv, ascii, and none'
     required: false
     default: "none"
+  position-units:
+    description: 'The units to use for the position file. Options are in, and mm. Does nothing if position format is none or gerber.'
+    required: false
+    default: "in"
 runs:
   using: 'docker'
   image: '{{ .image }}'
   args:
     - ${{`{{ inputs.input-file }}`}}
     - ${{`{{ inputs.output-directory }}`}}
+    - ${{`{{ inputs.drill-format }}`}}
+    - ${{`{{ inputs.drill-units }}`}}
     - ${{`{{ inputs.position-format }}`}}
+    - ${{`{{ inputs.position-units }}`}}
 branding:
   icon: 'cpu'
   color: 'green'
