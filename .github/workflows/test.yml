@@ -20,7 +20,7 @@ jobs:
         id: render_template
         uses: chuhlomin/render-template@v1
         with:
-          template: action.template.yml
+          template: templates/action.template.yml
           result_path: action.yml
           vars: |
             image: Dockerfile
@@ -33,3 +33,19 @@ jobs:
         with:
           name: test-gerber
           path: out/
+  test-readme-generation:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Update README.md
+        uses: recih/template-render-action@v1.0.2
+        env:
+          ACTION_REPO: ${{ github.repository }}
+          ACTION_VERSION: v1.0.0
+        with:
+          template-file: templates/README.template.md
+          output-file: README.md
+          engine: mustache
+      - name: Cat
+        run: cat README.md
